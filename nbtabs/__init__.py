@@ -65,6 +65,10 @@ def is_pytab(cell):
 def process_other_cell(cell_dict, tab_class):
     # TODO: handle case where no matching cell
     cell = cell_dict.get(tab_class)
+
+    if cell is None:
+        return None
+
     return create_node_with_id(cell)
 
 
@@ -91,7 +95,8 @@ def pytabs_create_cells(main_name, other_names = tuple()):
         # add cell ids
         new_cell = create_node_with_id(cell)
 
-        other_cells = [process_other_cell(cell_dict, tab_class) for cell_dict in other_nb_cells]
+        other_cells_all = [process_other_cell(cell_dict, tab_class) for cell_dict in other_nb_cells]
+        other_cells = [cell for cell in other_cells_all if cell is not None]
         other_cell_meta = [cell.metadata for cell in other_cells]
 
 
