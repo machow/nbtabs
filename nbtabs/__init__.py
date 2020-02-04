@@ -5,7 +5,7 @@ from jinja2 import Template
 from nbformat import NotebookNode 
 from copy import copy, deepcopy
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 TAB_NAV_TEMPLATE = """
