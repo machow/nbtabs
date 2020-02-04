@@ -126,6 +126,10 @@ def pytabs_insert_cells(notebook, tab_cells):
 
 # CLI -------------------------------------------------------------------------
 
+import shutil
+from pathlib import Path
+from pkg_resources import resource_filename
+
 @argh.arg("other_names", nargs = "+")
 def convert(main_name, other_names, out_name = None, execute = False):
     """Convert a main notebook, to include tabbed cells based on other notebooks."""
@@ -139,18 +143,14 @@ def convert(main_name, other_names, out_name = None, execute = False):
 
     if execute:
         from nbconvert.preprocessors import ExecutePreprocessor
-        from pathlib import Path
         path = str(Path(main_name).parent)
         ep = ExecutePreprocessor(timeout=600)
         ep.preprocess(final_nb, {'metadata': {'path': path}})
 
     jupytext.write(final_nb, out_name)
 
-
 def setup():
-    import shutil
-    from pathlib import Path
-    from pkg_resources import resource_filename
+    """Copy templates to one of the nbconvert directories."""
     from jupyter_core.paths import jupyter_path 
 
     template_path = Path(resource_filename('nbtabs', 'templates'))
@@ -165,10 +165,10 @@ def setup():
         shutil.copy2(src_fname, dst_path / src_fname.name)
 
 
-def copy_templates():
-    import shutil
+def copy_templates(dst_dir):
+    """Copy templates and assets to dst_dir."""
     template_path = Path(resource_filename('nbtabs', 'templates'))
-    shutil.copytree(template_path, dst)
+    shutil.copytree(template_path, dst_dir)
 
 
 def main():
